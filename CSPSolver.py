@@ -25,16 +25,28 @@ def sorted_domain(p, var, LCV=True):
     if LCV == False:
         return CSProblem.domain(p, var)
     else:
-        domain = p[1][var]
-        list_to_sort = []
-        for i in range(len(domain)):
-            num = num_of_del_vals([p, var, domain[i]])
-            list_to_sort.append([num, domain[i]])
-        sorted_list = sorted(list_to_sort, key=lambda x: x[0])
-        domain_sorted = []
-        for i in range(len(sorted_list)):
-            domain_sorted.append(sorted_list[i][1])
-        return domain_sorted
+        list_number_of_del_place = []
+        list_num_place = p[1][var]
+        final_list = []
+        for i in list_num_place:
+            l = (p, var, i)
+            num = num_of_del_vals(l)
+            list_number_of_del_place += [num]
+        for j in range(0, len(list_number_of_del_place)):
+            # min=min(list_number_of_del_place)
+            min = list_number_of_del_place[0]
+            index = 0
+            for k in range(0, len(list_number_of_del_place)):
+                if min > list_number_of_del_place[k]:
+                    min = list_number_of_del_place[k]
+                    index = k
+                    list_number_of_del_place[k] = 1000
+
+            # index=list_number_of_del_place.index(min)
+            final_list += [list_num_place[index]]
+            list_number_of_del_place.remove(list_number_of_del_place[index])
+            list_num_place.remove(list_num_place[index])
+        return final_list
 
 
 def num_of_del_vals(l):
@@ -61,13 +73,11 @@ def next_var(p, MRV=True):
         else:
             return v[0]
     else:
-        domains = p[1]
+        min = 1000
         index = 0
-        min_count = - 1
-        for i in range(len(domains)):
-            count = len(domains[i])
-            if count < min_count and count != 0:
-                min_count = count
+        for i in range(0, len(p[1])):
+            if min > len(p[1][i]) and len(p[1][i]) != 0:
+                min = len(p[1][i])
                 index = i
         return index
 
