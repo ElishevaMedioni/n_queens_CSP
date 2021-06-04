@@ -1,3 +1,4 @@
+
 import CSProblem
 import copy
 
@@ -30,10 +31,11 @@ def sorted_domain(p, var, LCV=True):
         final_list = []
         for i in list_num_place:
             l = (p, var, i)
+            # calling the function to know to num of val erased from the domains to each domain
             num = num_of_del_vals(l)
             list_number_of_del_place += [num]
+        # pass through the list to find the minimum
         for j in range(0, len(list_number_of_del_place)):
-            # min=min(list_number_of_del_place)
             min = list_number_of_del_place[0]
             index = 0
             for k in range(0, len(list_number_of_del_place)):
@@ -41,8 +43,7 @@ def sorted_domain(p, var, LCV=True):
                     min = list_number_of_del_place[k]
                     index = k
                     list_number_of_del_place[k] = 1000
-
-            # index=list_number_of_del_place.index(min)
+            # create a final list with the domains sorted
             final_list += [list_num_place[index]]
             list_number_of_del_place.remove(list_number_of_del_place[index])
             list_num_place.remove(list_num_place[index])
@@ -76,7 +77,8 @@ def next_var(p, MRV=True):
         min = 1000
         index = 0
         for i in range(0, len(p[1])):
-            if min > len(p[1][i]) and len(p[1][i]) != 0:
+            # pass through the list of domains and check which one has the lowest values
+            if min > len(p[1][i]) != 0:
                 min = len(p[1][i])
                 index = i
         return index
